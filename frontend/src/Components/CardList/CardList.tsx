@@ -8,7 +8,7 @@ const CardList: React.FC<Props> = (props: Props): JSX.Element => {
     <div>
       <Card companyName="Apple Inc." ticker="AAPL" price={100} />
       <Card companyName="Microsoft Corp." ticker="MSFT" price={250} />
-      <Card companyName="Amazon.com Inc." ticker="AMZN" price={150} />
+      <Card companyName="Tesla Inc." ticker="TSLA" price={300} />
     </div>
   );
 };
