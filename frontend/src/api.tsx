@@ -1,23 +1,52 @@
 import axios from "axios";
 import { CompanySearch } from "./company";
 
+export interface SearchResponse {
+  data: CompanySearch[];
+}
+
 export const searchCompanies = async (query: string) => {
-  // Decide which endpoint to use:
-  // If the query looks like a ticker (1–5 letters, no spaces)
-  const isSymbol = /^[A-Z]{1,5}$/i.test(query);
-  const endpoint = isSymbol ? "search-symbol" : "search-name";
-
-  const url = `https://financialmodelingprep.com/stable/${endpoint}?query=${query}&apikey=${process.env.REACT_APP_API_KEY}`;
-
   try {
-    const response = await axios.get<CompanySearch[]>(url);
-    return response.data;
-  } catch (error: unknown) {
+    const response = await axios.get<CompanySearch[]>(
+      `https://financialmodelingprep.com/stable/search-symbol?query=${query}&apikey=${process.env.REACT_APP_API_KEY}`
+    );
+
+    // 👇 MANUALLY match the old structure
+    return { data: response.data };
+
+  } catch (error) {
     if (axios.isAxiosError(error)) {
-      console.log("API error:", error.message);
-      return [];
+      return error.message;
     }
-    console.log("Unexpected error:", error);
-    return [];
+    return "Unexpected error";
   }
 };
+
+
+
+
+/* import axios from "axios";
+import { CompanySearch } from "./company";
+
+interface SearchResponse {
+  data: CompanySearch[];
+}
+
+export const searchCompanies = async (query: string): Promise<SearchResponse | string> => {
+  try {
+    const response = await axios.get<SearchResponse>(
+      `https://financialmodelingprep.com/stable/search-symbol?query=${query}&apikey=${process.env.REACT_APP_API_KEY}`
+    );
+
+    return response.data; // IMPORTANT FIX
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log("error message: ", error.message);
+      return error.message;
+    } else {
+      console.log("unexpected error: ", error);
+      return "An unexpected error occurred";
+    }
+  }
+};
+ */
